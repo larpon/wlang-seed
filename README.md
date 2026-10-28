@@ -32,5 +32,7 @@ cc -std=gnu11 -w wlang_linux_amd64.c -o w0 -lffi -ldl
 In the `wlang` project root, with a working `cmd/wlang` run:
 
 ```bash
-make seed
+cmd/wlang run cmd/tools/wseed.w
 ```
+
+**NOTE** Passing flags `-os <os> -arch <arch>` to `wlang` will generate a seed for another target.
