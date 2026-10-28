@@ -10,6 +10,7 @@ Currently there's a seed file for each OS and architecture:
 | File | Target |
 |---|---|
 | `wlang_linux_amd64.c` | Linux, x86-64 |
+| `wlang_linux_arm32.c` | Linux, 32-bit ARM (e.g. Raspberry Pi OS / Raspbian) |
 
 ## Bootstrapping
 
