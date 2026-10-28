@@ -11,29 +11,56 @@ Currently there's a seed file for each OS and architecture:
 |---|---|
 | `wlang_linux_amd64.c` | Linux, x86-64 |
 | `wlang_linux_arm32.c` | Linux, 32-bit ARM (e.g. Raspberry Pi OS / Raspbian) |
+| `wlang_windows_amd64.c` | Windows, x86-64 (MinGW-w64, UCRT) |
 
 ## Bootstrapping
 
-`wlang`'s own `Makefile` should already do this:
+### Unix / Linux
 
-Clone this repository to `seed/` in `wlang` project root and run:
+`wlang`'s own `Makefile` should already do this.
+
+To do it manually: clone this repository to `seed/` in `wlang` project root and run:
 
 ```bash
 make
 ```
 
-Compiling from a seed currently needs a C compiler and `libffi`:
+Compiling from a seed needs a working C compiler and `libffi`:
 
 ```bash
 cc -std=gnu11 -w wlang_linux_amd64.c -o w0 -lffi -ldl
 ```
 
+### Windows
+
+`wlang`'s own `make.bat` should already do this.
+
+To do it manually: clone this repository to `seed\` in `wlang` project root and run:
+
+```bat
+make.bat
+```
+
+Compiling from a seed needs `git`, a MinGW-w64 (UCRT) `gcc` C compiler and `libffi` (MSVC binaries are fine) extracted to `libffi\`
+(or set `W_LIBFFI`). See also `misc/windows_deps.sh` in the `wlang` project (it downloads the dependencies):
+
+```bat
+gcc -std=gnu11 -w wlang_windows_amd64.c -o w0.exe -Ilibffi -Llibffi -lffi -lkernel32 -Wl,--stack,67108864
+```
+
 ## Refreshing a seed
 
-In the `wlang` project root, with a working `cmd/wlang` run:
+To generate a fresh C source seed file - go to the `wlang` project root and with, a working, `cmd/wlang` run:
 
 ```bash
 cmd/wlang run cmd/tools/wseed.w
 ```
 
-**NOTE** Passing flags `-os <os> -arch <arch>` to `wlang` will generate a seed for another target.
+**NOTE** Passing `-os <os> -arch <arch>` to `wseed.w` (after `cmd/tools/wseed.w`) generates a seed for another
+target. For example:
+
+```bash
+cmd/wlang run cmd/tools/wseed.w -os windows -arch amd64
+```
+
+By default the C source seed is written to `seed/`. Use `-o <dir>` to control where it is written.
